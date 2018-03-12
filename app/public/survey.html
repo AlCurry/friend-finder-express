@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <!--     <link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.min.css"> -->
+    <title>Friend Finder - Express</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <h2 class="text-center">Survey Questions</h2>
+        <hr>
+
+        <h4>Name (Required)</h4>
+        <input type="text" id="name" class="form-control" required>
+
+        <h4>Link to Photo Image (Required)</h4>
+        <input type="text" id="photo" class="form-control" required>
+
+        <hr>
+
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">questions</h4>
+                    </div>
+                    <div class="panel-body" id="questHtml">
+                    </div>
+                </div>
+
+
+                <footer class="footer">
+                    <div class="container">
+                        <p>
+                            <a href="/api/friends">API Friends Link</a> |
+                            <a href="https://github.com/AlCurry">GitHub Repo</a>
+                        </p>
+                    </div>
+                </footer>
+
+            </div>
+            <script src="https://code.jquery.com/jquery.js"></script>
+        </div>
+</body>
+<script type="text/javascript">
+    function createSurvey() {
+
+        // Here we get the location of the root page.
+        // We use this instead of explicitly saying the URL is localhost:3001 because the url will change when we deploy.
+        var currentURL = window.location.origin;
+
+        // The AJAX function uses the URL of our API to GET the data associated with it (initially set to localhost)
+        $.ajax({ url: currentURL + "/api/survey", method: "GET" })
+            .done(function (questionData) {
+
+                // Here we are logging the URL so we have access to it for troubleshooting
+                console.log("------------------------------------");
+                console.log("URL: " + currentURL + "/api/tables");
+                console.log("------------------------------------");
+
+                // Here we then log the NYTData to console, where it will show up as an object.
+                console.log(questionData);
+                console.log("------------------------------------");
+
+                // Loop through and display each of the customers
+                for (var i = 0; i < questionData.length; i++) {
+
+                   var questNum= i + 1;
+                    // Create the HTML Well (Section) and Add the table content for each reserved table
+                    var questHtml = $("<h4>");
+                    //questHtml.addClass("well");
+                    questHtml.attr("id", "qID" + questNum);
+                    $("#questHtml").append(questHtml);
+
+                    // Then display the remaining fields in the HTML (Section Name, Date, URL)
+                   // $("#qID" + questNum).append("<h4>" +questNum + ".  " + questionData[i] + "</h4>");
+                    //$("#qID" + questNum).append(questNum + ".  " + questionData[i]);
+                    
+
+                     //var choiceHtml = $("<select>");
+                    var optHtml = ""
+                         optHtml += "<span><select>"
+                       for (var j = 1; j < 6;  j++) {
+                           
+                           optHtml += '<option value ="' + j + '">' + j + '</option> \n';
+                           //choiceHtml.attr("id", "chID" + j);
+                           //$("#choiceHtml").append(choiceHtml);
+                           //$("#chID" + j).append('option value="'+j+'">'+i+'</option>');
+                       } 
+                       optHtml += "</select></span>";
+                       console.log(optHtml);
+                       
+                       $("#qID" + questNum).append(questNum + ".  " + questionData[i],  optHtml);
+                }
+                    // Create html for each question 
+
+/*                 <h3>
+                    <strong>Question 1</strong>
+                </h3>
+                <h4>survey question 1</h4>
+                <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select> */
+
+                    // Then display the remaining fields in the HTML (Section Name, Date, URL)
+                    //$("#tableWell-" + i + 1).append("<h2><span class='label label-primary'>" + //questionNumber + "</span> | " + questionData[i] + "</h2>");
+            
+            });
+    }
+    createSurvey();
+</script>
+
+</html>
